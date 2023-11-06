@@ -12,13 +12,26 @@ let energiaLadydevimon = 100;
 
 let round = 0;
 
-while (energiaAngewomon > 0 && energiaLadydevimon > 0) {
+// Introducción del juego
+alert(
+  "Bienvenid@ al duelo Digimon. A continuación, deberás elegir si atacar o defender durante 6 rounds. Al final, verás quién ganará la batalla según tus decisiones. ¡A jugar!"
+);
+
+while (energiaAngewomon > 0 && energiaLadydevimon > 0 && round < 6) {
   round += 1;
 
   console.log("----------Round: " + round + "------------------------");
 
   let golpeAngewomon = calcularGolpe(MIN_POWER, MAX_POWER);
-  let golpeLadydevimon = calcularGolpe(MIN_POWER, MAX_POWER);
+
+  // Permitir al usuario elegir cuándo atacar o defender
+  const userChoice = prompt("Round " + round + ": Elige 'atacar' o 'defender");
+
+  let golpeLadydevimon = 0; // Inicializa el golpe de Ladydevimon en 0
+
+  if (userChoice === "atacar") {
+    golpeLadydevimon = calcularGolpe(MIN_POWER, MAX_POWER);
+  }
 
   console.log("Angewomon golpea con fuerza de " + golpeAngewomon);
   console.log("Ladydevimon golpea con fuerza de " + golpeLadydevimon);
