@@ -7,8 +7,19 @@ function calcularGolpe(minPower, maxPower) {
 const MIN_POWER = 10;
 const MAX_POWER = 30;
 
-let energiaAngewomon = 100;
-let energiaLadydevimon = 100;
+// Objetos para representar a los personajes
+const angewomon = {
+  nombre: "Angewomon",
+  energia: 100,
+};
+
+const ladydevimon = {
+  nombre: "Ladydevimon",
+  energia: 100,
+};
+
+// Objetos en un array para facilitar la gestión
+const personajes = [angewomon, ladydevimon];
 
 let round = 0;
 
@@ -17,53 +28,61 @@ alert(
   "Bienvenid@ al duelo Digimon. A continuación, deberás elegir si atacar o defender durante 6 rounds. Al final, verás quién ganará la batalla según tus decisiones. ¡A jugar!"
 );
 
-while (energiaAngewomon > 0 && energiaLadydevimon > 0 && round < 6) {
+while (angewomon.energia > 0 && ladydevimon.energia > 0 && round < 6) {
   round += 1;
 
   console.log("----------Round: " + round + "------------------------");
 
-  let golpeAngewomon = calcularGolpe(MIN_POWER, MAX_POWER);
-
   // Permitir al usuario elegir cuándo atacar o defender
   const userChoice = prompt("Round " + round + ": Elige 'atacar' o 'defender");
 
-  let golpeLadydevimon = 0; // Inicializa el golpe de Ladydevimon en 0
+  // Método de búsqueda para obtener el personaje actual del array
+  const personajeActual = personajes.find(
+    (personaje) => personaje.nombre === "Angewomon"
+  );
+
+  let golpePersonajeActual = calcularGolpe(MIN_POWER, MAX_POWER);
 
   if (userChoice === "atacar") {
-    golpeLadydevimon = calcularGolpe(MIN_POWER, MAX_POWER);
+    // Método de búsqueda y filtrado
+    const oponente = personajes.find(
+      (personaje) => personaje.nombre !== personajeActual.nombre
+    );
+    golpePersonajeActual = calcularGolpe(MIN_POWER, MAX_POWER);
+
+    console.log(
+      personajeActual.nombre + " ataca con fuerza de " + golpePersonajeActual
+    );
+    console.log(
+      oponente.nombre + " recibe el golpe con fuerza de " + golpePersonajeActual
+    );
+
+    oponente.energia -= golpePersonajeActual;
+
+    // Imágenes
+    document.write(
+      `<div class='card'><img src='img/pega_${personajeActual.nombre.toLowerCase()}.png' /></div>`
+    );
+    document.write(
+      `<div class='card'><img src='img/pega_${oponente.nombre.toLowerCase()}.png' /></div>`
+    );
   }
 
-  console.log("Angewomon golpea con fuerza de " + golpeAngewomon);
-  console.log("Ladydevimon golpea con fuerza de " + golpeLadydevimon);
-
-  if (golpeAngewomon === golpeLadydevimon) {
-    console.log("siga siga");
-  } else if (golpeLadydevimon > golpeAngewomon) {
-    energiaAngewomon -= golpeLadydevimon;
-    document.write(
-      "<div class='card'><img src='img/pega_ladydevimon.png' /></div>"
-    );
-  } else {
-    energiaLadydevimon -= golpeAngewomon;
-    document.write(
-      "<div class='card'><img src='img/pega_angewomon.png'/></div>"
-    );
-  }
-
-  console.log("La energía de Angewomon es " + energiaAngewomon);
-  console.log("La energía de Ladydevimon es " + energiaLadydevimon);
+  console.log("La energía de Angewomon es " + angewomon.energia);
+  console.log("La energía de Ladydevimon es " + ladydevimon.energia);
 }
 
 console.log("------- GANADORA ----------");
 
-if (energiaAngewomon > 0) {
-  console.log("Ganó Angewomon....");
+// Método de filtrado para obtener a la ganadora
+const ganador = personajes.find((personaje) => personaje.energia > 0);
+
+if (ganador) {
+  console.log("Ganó " + ganador.nombre + "....");
+  // Imagen de la ganadora
   document.write(
-    "<div class='ganador'><img src='img/muere_ladydevimon.png'/></div>"
+    `<div class='ganador'><img src='img/gana_${ganador.nombre.toLowerCase()}.png'/></div>`
   );
 } else {
-  console.log("Ganó Ladydevimon....");
-  document.write(
-    "<div class='ganador'><img src='img/muere_angewomon.png' /></div>"
-  );
+  console.log("Empate....");
 }
